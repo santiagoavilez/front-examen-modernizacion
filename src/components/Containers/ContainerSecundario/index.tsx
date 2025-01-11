@@ -8,7 +8,7 @@ type RFC = React.FC<{
     containerClass?: string
     headerClass?: string
     tituloClass?: string
-    actions?: React.ReactNode //Se me ocurre para agregar botones u otros elementos 
+    actions?: React.ReactNode //Se me ocurre para agregar botones u otros elementos
 }>
 
 const ContainerSecundario: RFC = ({

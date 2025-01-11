@@ -10,3 +10,4 @@ export { default as ManagementUsuarios } from "./Management/Usuarios";
  */
 export { default as Menu } from "./Menu"
 export { default as PageExample } from "./PageExample"
+export { default as ExamenPage } from "./ExamenPage"

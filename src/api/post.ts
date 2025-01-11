@@ -11,13 +11,12 @@ export const postForm = async (
     setLoading && setLoading(true)
     const response = await axios().post(path, form)
     setLoading && setLoading(false)
-
+    console.log("Response:", response)
     const { data, error } = response.data
-
+    console.log("Data:", data)
     if (data) {
         // console.log("Data:", data)
         return data
-        
     }
 
     if (error) {

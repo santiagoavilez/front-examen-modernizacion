@@ -6,6 +6,7 @@ import { BasicContainer, /* , Modal */ } from "../../components";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { ModalPropio } from '../../components';
+import { Button } from "@/components/ui/button";
 
 
 const Menu = () => {
@@ -34,6 +35,7 @@ const Menu = () => {
     const permisosOrigen = [
         { name: "origen.ejemplo" },
         { name: "origen.login" },
+        { name: "origen.examen" },
     ];
     const hasPermission = (permisoName: string): boolean => {
         return true;
@@ -41,14 +43,14 @@ const Menu = () => {
 
     return (
         <BasicContainer titulo='Componente Menu a traves de un modal'>
-            
-            <div className="p-4">
-                <button
+
+            <div className="p-4 ">
+                <Button
                     onClick={handleOpen}
-                    className="btn btn-primary py-2"
+                    className=" text-black  hover:bg-blue-600 hover:text-gray-200   "
                 >
                     Abrir menu
-                </button>
+                </Button>
                 <ModalPropio
                     show={showModal}
                     onHide={handleClose}
@@ -72,9 +74,9 @@ const Menu = () => {
                                 {permisosOrigen.map((permiso) => {
                                     const nombreOrigen = permiso.name.split(".")[1]
                                     return (
-                                       
-                                        <button
-                                            className='btn btn-primary w-100 btn-menu'
+
+                                        <Button
+                                            className=' border-blue-600 text-black w-100 btn-menu'
                                             onClick={() =>
                                                 nav(`/${nombreOrigen}`)
                                             }
@@ -82,17 +84,17 @@ const Menu = () => {
                                             key={permiso.name}
                                         >
                                             {nombreOrigen.toUpperCase()}
-                                        </button>
+                                        </Button>
                                     )
                                 })}
-                                <button
-                                    className='btn btn-primary w-100 btn-menu'
+                                <Button
+                                    className=' border-blue-600 text-black w-100 btn-menu'
                                     onClick={() => nav("/404vadarerror")}
                                 >
                                     404 notFound
-                                </button>
+                                </Button>
                                 {/* <button
-                                    className='btn btn-primary w-100 btn-menu'
+                                    className='btn btn-primary text-black w-100 btn-menu'
                                     onClick={() => nav("/PageExample")}
                                 >
                                     prueba de container
@@ -102,11 +104,11 @@ const Menu = () => {
                     </div>
                 </ModalPropio>
             </div>
-          
+
 
         </BasicContainer>
     )
-   
+
 
 }
 

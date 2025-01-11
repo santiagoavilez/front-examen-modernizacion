@@ -21,7 +21,8 @@ const Login = () => {
     const nav = useNavigate()
 
     const login = async (form: any) => {
-        const data = await postForm("internal_login", form, showSpinner)
+        const data = await postForm("login", form, showSpinner)
+        console.log(data)
         if (data) {
             setStorage(data)
             ua.setStore(data)
@@ -70,7 +71,7 @@ const Login = () => {
                     <div className='d-flex justify-content-center mt-3'>
                         <button
                             type='submit'
-                            className='btn btn-primary w-100 py-2'
+                            className='btn btn-primary  w-100 py-2'
                             disabled={loading}
                             style={{ fontSize: "1.1rem", fontWeight: "500" }}
                         >

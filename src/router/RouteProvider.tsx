@@ -25,6 +25,8 @@ const RouteProvider = () => {
 
         <Route path="/login" element={<S.Login />} />
         <Route path="/ejemplo" element={<S.PageExample />} />
+        <Route path="/examen" element={<S.ExamenPage />} />
+
       </Routes>
     </HashRouter>
   );
