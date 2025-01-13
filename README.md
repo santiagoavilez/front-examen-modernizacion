@@ -19,6 +19,13 @@
 
 3. Copiar el `.env.example` y generar `.env.local`, `.env.replica` y `.env.production`
 
+en el archivo `.env.local` se debe agregar la url del backend
+
+    ```env
+
+VITE_URL_BACK=http://127.0.0.1:8000/api/
+```
+
 <hr/>
 
 1. Modificar el archivo `./index.html`
