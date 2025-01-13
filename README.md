@@ -1,15 +1,15 @@
-- [Configuración inicial](#configuración-inicial)
-- [Build](#build)
-- [Estilos](#estilos)
+-   [Configuración inicial](#configuración-inicial)
+-   [Build](#build)
+-   [Estilos](#estilos)
 
 # Configuración inicial
 
 1. Cambiar la configuracion del `package.json`
 
-   ```json
-   "name": "appname",
-   "description": "descripción básica de la app",
-   ```
+    ```json
+    "name": "appname",
+    "description": "descripción básica de la app",
+    ```
 
 <hr/>
 
@@ -23,26 +23,26 @@
 
 1. Modificar el archivo `./index.html`
 
-- content del meta tag con name "description":
+-   content del meta tag con name "description":
 
-  ```html
-  <meta name="description" content="Template" />
-  ```
+    ```html
+    <meta name="description" content="Template" />
+    ```
 
-- Contenido del title del proyecto
+-   Contenido del title del proyecto
 
-  ```html
-  <title>Appname - Municipalidad de Neuquén</title>
-  ```
+    ```html
+    <title>Appname - Municipalidad de Neuquén</title>
+    ```
 
 <hr/>
 
 5. Modificar el archivo `public/manifest.json`
 
-   ```json
-   "short_name": "Appname",
-   "name": "Appname - Municipalidad Neuquén",
-   ```
+    ```json
+    "short_name": "Appname",
+    "name": "Appname - Municipalidad Neuquén",
+    ```
 
 <hr/>
 
@@ -52,11 +52,13 @@
 
 # Build
 
-- Réplica: `npm run build:replica`
-- Producción: `npm run build`
+-   Réplica: `npm run build:replica`
+-   Producción: `npm run build`
 
 <hr />
 
 # Estilos
 
 Por defecto los estilos son de Bootstrap 5. En caso de querer usar Tailwind CSS o alguna otra librería de estilos, comentar en el `index.html` los imports de bootstrap y agregar por paquete y/o cdn los que se vayan a usar
+
+11. Para logearse en la aplicacion se puede usar el usuario admin@example y la contraseña esta en el archivo de seeders del backend
