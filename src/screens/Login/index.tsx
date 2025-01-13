@@ -7,13 +7,12 @@ import { UserContext } from "../../context/UserWrapper"
 import { Input } from "../../components"
 
 import { schema } from "./schema"
-import { postForm } from "../../api"
 import { setStorage } from "../../utils/localStorage"
-import { showSpinner } from "../../handlers"
+import { axios } from "@/utils/axios"
 
 const Login = () => {
-    const { actions: ua, loading } = useContext(UserContext)
-
+    const { actions: ua, loading, } = useContext(UserContext)
+    console.log("ua user", ua.user())
     const { register, handleSubmit, formState } = useForm({
         resolver: yupResolver(schema),
     })
@@ -21,12 +20,19 @@ const Login = () => {
     const nav = useNavigate()
 
     const login = async (form: any) => {
-        const data = await postForm("login", form, showSpinner)
-        console.log(data)
+        // const data = await postForm("login", form, showSpinner)
+        const respone = await axios().post("/login", form)
+        if (respone.status !== 200) {
+            console.log("error de axios", respone.data)
+            alert("Error al iniciar sesión" + respone.data.message)
+            return
+        }
+        const { data } = respone
+        console.log("data de axios", data)
         if (data) {
             setStorage(data)
             ua.setStore(data)
-            nav(`/`)
+            nav(`/examen`)
         }
     }
 

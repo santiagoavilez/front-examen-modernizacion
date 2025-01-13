@@ -9,9 +9,12 @@ import { User } from "@/interface"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import ReactSelect from 'react-select'
 import { Label } from "../ui/label"
+import { Task } from "@/interface/Task"
+import { getStorage } from "@/utils/localStorage"
 
 interface Props {
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
+    task: Task
 }
 
 const fetchUsers = async () => {
@@ -24,7 +27,11 @@ const postTask = async (form: any) => {
     return response.data;
 }
 
-const TaskForm = ({ setOpen }: Props) => {
+const EditTaskForm = ({ setOpen, task }: Props) => {
+    const taskprioritivalue = {
+        label: task.priority.name,
+        value: task.priority.id
+    }
     const { register, handleSubmit, formState, control } = useForm({
         resolver: yupResolver(schema),
     })
@@ -43,7 +50,10 @@ const TaskForm = ({ setOpen }: Props) => {
     console.log('new task', newTask)
     console.log('is error task', isErrorTask)
     console.log('is success task', isSuccess)
+    const storage = getStorage()
+    const user = storage?.user
 
+    const userIsAdmin = user?.role[0].name === 'Admin'
     // primero se valida si esta cargando, si hay un error o si no hay users
     if (isLoading) return <p className="text-center">Cargando users...</p>;
     if (isError) return <p className="text-center text-red-500">Error al cargar las users.</p>;
@@ -92,6 +102,7 @@ const TaskForm = ({ setOpen }: Props) => {
                         label: "form-label text-muted",
                         input: "form-control form-control shadow-sm",
                     }}
+                    value={task.title}
                     invalidMsg={formState.errors.title?.message}
                     label={"Titulo*"}
                     register={{ ...register("title") }}
@@ -101,80 +112,71 @@ const TaskForm = ({ setOpen }: Props) => {
                         label: "form-label text-muted",
                         input: "form-control form-control shadow-sm",
                     }}
+                    value={task.description}
                     invalidMsg={formState.errors.description?.message}
                     label='Descripcion corta *'
                     register={{ ...register("description") }}
                 />
-                <label className=' form-label text-muted'>Prioridad</label>
-                <Controller
-                    control={control}
-                    name="priority"
-                    render={({
-                        field: { onChange, value, name, ref },
-                    }) => (
-                        <ReactSelect
-                            isSearchable
-                            onChange={onChange}
-                            value={value ? value : {
-                                label: "Media",
-                                value: "2"
-                            }}
-                            name={name}
-                            ref={ref}
-                            placeholder='Seleccionar prioridad'
-                            className="py-2"
-                            options={[
-                                {
-                                    label: "Baja",
-                                    value: "1"
-                                },
-                                {
-                                    label: "Media",
-                                    value: "2"
-                                },
-                                {
-                                    label: "Alta",
-                                    value: "3"
-                                }
-                            ]}
-                        />
-                    )}
-                />
-                {formState.errors.priority && <Label className='text-danger'>{formState.errors.priority?.message}</Label>}
-                <label className=' form-label text-muted'>Usuarios asignados</label>
+                {userIsAdmin && <>
+                    <label className=' form-label text-muted'>Prioridad</label>
+                    <Controller
+                        control={control}
+                        name="priority"
+                        render={({
+                            field: { onChange, value, name, ref },
+                        }) => (
+                            <ReactSelect
+                                isSearchable
+                                onChange={onChange}
+                                value={value ? value : taskprioritivalue}
+                                name={name}
+                                ref={ref}
+                                placeholder='Seleccionar prioridad'
+                                className="py-2"
+                                options={[
+                                    {
+                                        label: "Baja",
+                                        value: "1"
+                                    },
+                                    {
+                                        label: "Media",
+                                        value: "2"
+                                    },
+                                    {
+                                        label: "Alta",
+                                        value: "3"
+                                    }
+                                ]}
+                            />
+                        )}
+                    />
+                    {formState.errors.priority && <Label className='text-danger'>{formState.errors.priority?.message}</Label>}
+                    <label className=' form-label text-muted'>Usuarios asignados</label>
 
-                <Controller
-                    control={control}
-                    name="users"
+                    <Controller
+                        control={control}
+                        name="users"
 
-                    render={({
-                        field: { onChange, value, name, ref },
-                    }) => (
-                        <ReactSelect
-                            isMulti
-                            isSearchable
-                            onChange={onChange}
-                            value={value ? value : []}
-                            name={name}
-                            ref={ref}
-                            isLoading={isLoading}
-                            loadingMessage={() => 'Cargando usuarios...'}
-                            placeholder='Seleccionar usuarios'
-                            options={formatUsers(users)}
-                        />
-                    )}
-                />
-                {formState.errors.users && <Label className='text-danger'>{formState.errors.users.message}</Label>}
-                {/* <SelectSearch
-                    isMulti
-                    className={{
-                        container: "flex flex-col py-2",
-                        label: "text-muted",
-                    }}
-                    options={formatUsers(users)
-                    }
-                    label="Usuarios"
-                /> */}
+                        render={({
+                            field: { onChange, value, name, ref },
+                        }) => (
+                            <ReactSelect
+                                isMulti
+                                isSearchable
+                                onChange={onChange}
+                                value={value ? value : formatUsers(task.users)}
+                                name={name}
+                                ref={ref}
+                                isLoading={isLoading}
+                                loadingMessage={() => 'Cargando usuarios...'}
+                                placeholder='Seleccionar usuarios'
+                                options={formatUsers(users)}
+                            />
+                        )}
+                    />
+                    {formState.errors.users && <Label className='text-danger'>{formState.errors.users.message}</Label>}
+                </>
+                }
                 <div className='d-flex justify-content-center mt-3'>
                     <button
                         type='submit'
@@ -182,7 +184,7 @@ const TaskForm = ({ setOpen }: Props) => {
                         disabled={isLoading}
                         style={{ fontSize: "1.1rem", fontWeight: "500" }}
                     >
-                        {isLoadingTask ? "Cargando..." : "Añadir"}
+                        {isLoadingTask ? "Cargando..." : "Editar tarea"}
                     </button>
                 </div>
             </form>
@@ -191,4 +193,4 @@ const TaskForm = ({ setOpen }: Props) => {
     )
 }
 
-export default TaskForm
+export default EditTaskForm

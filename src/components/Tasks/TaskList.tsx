@@ -1,17 +1,24 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { Task } from "@/interface/Task";
+import { axios } from "@/utils/axios";
+import TaskCard from "./TaskCard";
 
-const fetchTasks = async () => {
-    const response = await axios.get("http://127.0.0.1:8000/api/tasks");
+const fetchTasks = async ({ userRoleId, userId }: TaskBoardProps) => {
+    const response = await axios().get("/tasks", {
+        params: { userRoleId, userId }
+    });
     return response.data;
 };
 
+interface TaskBoardProps {
+    userRoleId: number;
+    userId: number
+}
 
-
-const TaskBoard = () => {
-    const taskquery = useQuery({ queryKey: ["tasks"], queryFn: fetchTasks });
+const TaskBoard = ({ userRoleId, userId }: TaskBoardProps) => {
+    console.log("userRoleId", userRoleId);
+    const taskquery = useQuery({ queryKey: ["task_list"], queryFn: () => fetchTasks({ userRoleId, userId }) });
     const { data: dataTasks, isLoading, isError } = taskquery;
     const tasks: Task[] = dataTasks;
     console.log(tasks);
@@ -53,20 +60,20 @@ const TaskColumn = ({ title, tasks }: { title: "pendiente" | "enProgreso" | "com
     );
 };
 
-const TaskCard = ({ task }: { task: Task }) => (
-    <div className="bg-white shadow-md p-3 rounded-md">
-        <h3 className="font-semibold text-gray-800">{task.title}</h3>
-        <p className="text-sm text-gray-600">{task.description}</p>
-        <span className="text-xs bg-gray-200 px-2 py-1 rounded-full">{task.priority.name}</span>
-        {task.users.map(user => (
-            <div key={user.id} className="flex items-center space-x-2">
-                {/* <img src={user.avatar} alt={user.name} className="w-6 h-6 rounded-full" /> */}
-                <span className="text-sm">{user.name}</span>
+// const TaskCard = ({ task }: { task: Task }) => (
+//     <div className="bg-white shadow-md p-3 rounded-md">
+//         <h3 className="font-semibold text-gray-800">{task.title}</h3>
+//         <p className="text-sm text-gray-600">{task.description}</p>
+//         <span className="text-xs bg-gray-200 px-2 py-1 rounded-full">{task.priority.name}</span>
+//         {task.users.map(user => (
+//             <div key={user.id} className="flex items-center space-x-2">
+//                 {/* <img src={user.avatar} alt={user.name} className="w-6 h-6 rounded-full" /> */}
+//                 <span className="text-sm">{user.name}</span>
 
-            </div>
-        ))}
+//             </div>
+//         ))}
 
-    </div>
-);
+//     </div>
+// );
 
 export default TaskBoard;

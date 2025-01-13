@@ -55,7 +55,7 @@ const SelectSearch: React.FC<SelectSearchProps> = ({
                 <label
                     htmlFor={"input-" + id}
                     className={`
-                                    ${className?.label ? className?.label : ""} 
+                                    ${className?.label ? className?.label : ""}
                                     ${invalidMsg ? "invalid" : ""}
                                 `}
                 >
@@ -64,10 +64,12 @@ const SelectSearch: React.FC<SelectSearchProps> = ({
             ) : (
                 isValidElement(label) && label
             )}
+
+
             <Select
                 /* className='react-select' */
                 /* className={`
-                    ${className?.input ? className?.input : ""} 
+                    ${className?.input ? className?.input : ""}
                     ${invalidMsg ? "invalid" : ""}
                 `} */
                 id={`select_${id}`}

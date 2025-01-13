@@ -7,7 +7,7 @@ const KEY = window.location.origin as string
 export const getStorage = () =>
     JSON.parse(localStorage.getItem(KEY) as string) as Store | null
 
-export const getAppData = () => getStorage()?.app_data
+// export const getAppData = () => getStorage()?.app_data
 
 export const setStorage = (s: Store | null) =>
     localStorage.setItem(KEY, JSON.stringify(s))

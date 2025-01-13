@@ -1,20 +1,34 @@
-import { Permission, Role, Person } from "."
+import {
+    //  Permission,
+    Role,
+    Person,
+} from "."
 
 export type FrontType = "backoffice" | "inspector"
+// export interface Store {
+//     user: User | null
+//     app_data: AppData | null
+//     front_types: FrontType[]
+//     token: string | null
+// }
 export interface Store {
     user: User | null
-    app_data: AppData | null
-    front_types: FrontType[]
     token: string | null
 }
 
+// export interface User {
+//     id: number
+//     persona: Person
+//     permissions: Permission[]
+//     roles: Role[]
+// }
+
 export interface User {
     id: number
-    persona: Person
-    permissions: Permission[]
-    roles: Role[]
+    email: string
+    name: string
+    role: Role[]
 }
-
 export interface AppData {}
 
 export interface Actions {
