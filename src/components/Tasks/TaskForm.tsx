@@ -33,16 +33,14 @@ const TaskForm = ({ setOpen }: Props) => {
     const users: User[] = dataUsers;
 
     const queryClient = useQueryClient()
-    const { data: newTask, isPending: isLoadingTask, isError: isErrorTask, mutate, isSuccess } = useMutation({
+    const { isPending: isLoadingTask, mutate } = useMutation({
         mutationFn: postTask,
         onSuccess: async () => {
             queryClient.fetchQuery({ queryKey: ["task_list"] })
             setOpen(false)
         }
     })
-    console.log('new task', newTask)
-    console.log('is error task', isErrorTask)
-    console.log('is success task', isSuccess)
+
 
     // primero se valida si esta cargando, si hay un error o si no hay users
     if (isLoading) return <p className="text-center">Cargando users...</p>;
@@ -160,6 +158,7 @@ const TaskForm = ({ setOpen }: Props) => {
                             isLoading={isLoading}
                             loadingMessage={() => 'Cargando usuarios...'}
                             placeholder='Seleccionar usuarios'
+                            // se debe formatear los usuarios para que se vean en el select este error se debe a que el select espera un array de objetos con value y label
                             options={formatUsers(users)}
                         />
                     )}

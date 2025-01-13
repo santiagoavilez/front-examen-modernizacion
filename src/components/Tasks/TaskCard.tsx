@@ -1,10 +1,14 @@
 import { Task } from "@/interface/Task";
 import { Avatar, AvatarFallback } from "../ui/avatar";
-import { Pencil } from "lucide-react";
 import TaskEditButton from "./TaskEditButton";
+import DeleteTaskButton from "./DeleteTaskButton";
+import { getStorage } from "@/utils/localStorage";
 
 const TaskCard = ({ task }: { task: Task }) => {
+    const storage = getStorage()
+    const user = storage?.user
 
+    const userIsAdmin = user?.role[0].name === 'Admin'
     const getNameInitials = (name: string) => {
         return name.split(" ").map(word => word[0]).join("");
     }
@@ -29,6 +33,10 @@ const TaskCard = ({ task }: { task: Task }) => {
                     </div>
                 ))}
             </div>
+            {userIsAdmin && <div className="absolute bottom-2 right-2 flex gap-2 cursor-pointer text-red-600">
+
+                <DeleteTaskButton taskId={task.id} />
+            </div>}
         </div>
     )
 }

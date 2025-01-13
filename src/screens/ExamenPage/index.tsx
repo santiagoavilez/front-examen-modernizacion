@@ -47,7 +47,7 @@ const ExamenPage = () => {
                 </div>
             }
         >
-            <p>
+            <p className="text-xl py-2">
                 Esta es la pagina del Examen de la secretaria de modernizacion de la municipalidad de Neuquen
             </p>
 

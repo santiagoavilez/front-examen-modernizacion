@@ -27,9 +27,9 @@ const TaskBoard = ({ userRoleId, userId }: TaskBoardProps) => {
     if (isError) return <p className="text-center text-red-500">Error al cargar las tareas.</p>;
     if (!tasks && !isLoading && !isError) return <p>no hay tareas aun</p>;
     const tasksByStatus: { [key: string]: Task[] } = {
-        "pendiente": tasks?.filter(task => task.status.name === "Pending"),
-        "enProgreso": tasks?.filter(task => task.status.name === "In Progress"),
-        "completada": tasks?.filter(task => task.status.name === "Completed"),
+        "pendiente": tasks?.filter(task => task.status.name === "Pendiente"),
+        "enProgreso": tasks?.filter(task => task.status.name === "En Progreso"),
+        "completada": tasks?.filter(task => task.status.name === "Completado"),
     };
 
     return (

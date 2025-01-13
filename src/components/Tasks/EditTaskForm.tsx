@@ -22,15 +22,19 @@ const fetchUsers = async () => {
     return response.data;
 };
 
-const postTask = async (form: any) => {
-    const response = await axios().post("/task", form);
+const postTask = async ({ form, taskId }: { form: any; taskId: number }) => {
+    const response = await axios().put(`/tasks/${taskId}`, form);
     return response.data;
 }
 
 const EditTaskForm = ({ setOpen, task }: Props) => {
-    const taskprioritivalue = {
+    const taskPriorityValue = {
         label: task.priority.name,
         value: task.priority.id
+    }
+    const taskStatusVlaue = {
+        label: task.status.name,
+        value: task.status.id
     }
     const { register, handleSubmit, formState, control } = useForm({
         resolver: yupResolver(schema),
@@ -68,7 +72,14 @@ const EditTaskForm = ({ setOpen, task }: Props) => {
     }
     const onSubmit = async (form: any) => {
         // const data = await postForm("login", form, showSpinner)
-        console.log('formulario enviado', form.priority)
+        console.log('formulario enviado', form)
+
+        if (!form.status.value) {
+            form.status_id = task.status.id
+        }
+        else {
+            form.status_id = parseInt(form.status.value);
+        }
         if (!form.priority.value) {
             form.priority_id = 2
             console.log('update', form)
@@ -88,7 +99,7 @@ const EditTaskForm = ({ setOpen, task }: Props) => {
             console.log('formatted users', form);
         }
 
-        mutate(form)
+        mutate({ form, taskId: task.id })
 
 
     }
@@ -102,7 +113,7 @@ const EditTaskForm = ({ setOpen, task }: Props) => {
                         label: "form-label text-muted",
                         input: "form-control form-control shadow-sm",
                     }}
-                    value={task.title}
+                    defaultValue={task.title}
                     invalidMsg={formState.errors.title?.message}
                     label={"Titulo*"}
                     register={{ ...register("title") }}
@@ -112,12 +123,44 @@ const EditTaskForm = ({ setOpen, task }: Props) => {
                         label: "form-label text-muted",
                         input: "form-control form-control shadow-sm",
                     }}
-                    value={task.description}
+                    defaultValue={task.description}
                     invalidMsg={formState.errors.description?.message}
                     label='Descripcion corta *'
                     register={{ ...register("description") }}
                 />
                 {userIsAdmin && <>
+                    <label className=' form-label text-muted'>Estado</label>
+                    <Controller
+                        control={control}
+                        name="status"
+                        render={({
+                            field: { onChange, value, name, ref },
+                        }) => (
+                            <ReactSelect
+                                isSearchable
+                                onChange={onChange}
+                                value={value ? value : taskStatusVlaue}
+                                name={name}
+                                ref={ref}
+                                placeholder='Seleccionar Estado'
+                                className="py-2"
+                                options={[
+                                    {
+                                        label: "Pendiente",
+                                        value: "1"
+                                    },
+                                    {
+                                        label: "En progreso",
+                                        value: "2"
+                                    },
+                                    {
+                                        label: "Completado",
+                                        value: "3"
+                                    }
+                                ]}
+                            />
+                        )}
+                    />
                     <label className=' form-label text-muted'>Prioridad</label>
                     <Controller
                         control={control}
@@ -128,7 +171,7 @@ const EditTaskForm = ({ setOpen, task }: Props) => {
                             <ReactSelect
                                 isSearchable
                                 onChange={onChange}
-                                value={value ? value : taskprioritivalue}
+                                value={value ? value : taskPriorityValue}
                                 name={name}
                                 ref={ref}
                                 placeholder='Seleccionar prioridad'
