@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 import TaskEditButton from "./TaskEditButton";
 import DeleteTaskButton from "./DeleteTaskButton";
 import { getStorage } from "@/utils/localStorage";
+import TaskMarkAsCompleted from "./TaskMarkAsCompleted";
 
 const TaskCard = ({ task }: { task: Task }) => {
     const storage = getStorage()
@@ -12,6 +13,10 @@ const TaskCard = ({ task }: { task: Task }) => {
     const getNameInitials = (name: string) => {
         return name.split(" ").map(word => word[0]).join("");
     }
+
+    const userIsAsingnedtoTask = task.users.some(user => user.id === storage?.user?.id)
+    console.log("userIsAsingnedtoTask", userIsAsingnedtoTask)
+    const userHasMarkedTaskAsCompleted = task.users.some(user => user.id === storage?.user?.id && user.is_completed)
     return (
         <div className="bg-white shadow-md p-3 flex flex-col gap-2 rounded-md relative">
             <div className="flex justify-end absolute top-2 right-2 cursor-pointer">
@@ -30,6 +35,11 @@ const TaskCard = ({ task }: { task: Task }) => {
                             <AvatarFallback>{getNameInitials(user.name)}</AvatarFallback>
                         </Avatar>
                         <span className="text-sm">{user.name}</span>
+                        {user.is_completed ? (
+                            <span className="text-green-500">✔</span>
+                        ) : (
+                            <span className="text-red-500">✘</span>
+                        )}
                     </div>
                 ))}
             </div>
@@ -37,6 +47,14 @@ const TaskCard = ({ task }: { task: Task }) => {
 
                 <DeleteTaskButton taskId={task.id} />
             </div>}
+
+            {userIsAsingnedtoTask && <div>
+                {user?.id && (
+                    <TaskMarkAsCompleted taskId={task.id} userId={user.id} userHasMarkedTaskAsCompleted={userHasMarkedTaskAsCompleted} />
+                )}
+
+            </div>}
+
         </div>
     )
 }

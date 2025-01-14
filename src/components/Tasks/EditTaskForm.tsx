@@ -32,10 +32,6 @@ const EditTaskForm = ({ setOpen, task }: Props) => {
         label: task.priority.name,
         value: task.priority.id
     }
-    const taskStatusVlaue = {
-        label: task.status.name,
-        value: task.status.id
-    }
     const { register, handleSubmit, formState, control } = useForm({
         resolver: yupResolver(schema),
     })
@@ -44,16 +40,14 @@ const EditTaskForm = ({ setOpen, task }: Props) => {
     const users: User[] = dataUsers;
 
     const queryClient = useQueryClient()
-    const { data: newTask, isPending: isLoadingTask, isError: isErrorTask, mutate, isSuccess } = useMutation({
+    const { isPending: isLoadingTask, mutate } = useMutation({
         mutationFn: postTask,
         onSuccess: async () => {
             queryClient.fetchQuery({ queryKey: ["task_list"] })
             setOpen(false)
         }
     })
-    console.log('new task', newTask)
-    console.log('is error task', isErrorTask)
-    console.log('is success task', isSuccess)
+
     const storage = getStorage()
     const user = storage?.user
 
@@ -72,22 +66,13 @@ const EditTaskForm = ({ setOpen, task }: Props) => {
     }
     const onSubmit = async (form: any) => {
         // const data = await postForm("login", form, showSpinner)
-        console.log('formulario enviado', form)
 
-        if (!form.status.value) {
-            form.status_id = task.status.id
-        }
-        else {
-            form.status_id = parseInt(form.status.value);
-        }
         if (!form.priority.value) {
             form.priority_id = 2
-            console.log('update', form)
 
         }
         else {
             form.priority_id = parseInt(form.priority.value);
-            console.log('update int', form)
 
         }
         if (form?.users) {
@@ -96,7 +81,6 @@ const EditTaskForm = ({ setOpen, task }: Props) => {
                 name: user.label
             }));
             form.users = usersTask;
-            console.log('formatted users', form);
         }
 
         mutate({ form, taskId: task.id })
@@ -129,38 +113,7 @@ const EditTaskForm = ({ setOpen, task }: Props) => {
                     register={{ ...register("description") }}
                 />
                 {userIsAdmin && <>
-                    <label className=' form-label text-muted'>Estado</label>
-                    <Controller
-                        control={control}
-                        name="status"
-                        render={({
-                            field: { onChange, value, name, ref },
-                        }) => (
-                            <ReactSelect
-                                isSearchable
-                                onChange={onChange}
-                                value={value ? value : taskStatusVlaue}
-                                name={name}
-                                ref={ref}
-                                placeholder='Seleccionar Estado'
-                                className="py-2"
-                                options={[
-                                    {
-                                        label: "Pendiente",
-                                        value: "1"
-                                    },
-                                    {
-                                        label: "En progreso",
-                                        value: "2"
-                                    },
-                                    {
-                                        label: "Completado",
-                                        value: "3"
-                                    }
-                                ]}
-                            />
-                        )}
-                    />
+
                     <label className=' form-label text-muted'>Prioridad</label>
                     <Controller
                         control={control}

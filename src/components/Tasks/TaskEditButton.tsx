@@ -15,7 +15,7 @@ export default function TaskEditButton({ task }: { task: Task }) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Pencil />
+                <Pencil className='hover:fill-black' />
             </DialogTrigger>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
